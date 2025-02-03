@@ -1,6 +1,5 @@
 # SWE 632 User Interface Projects & Homeworks
 
-
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](#contributing)
 
 Welcome to my **SWE 632** repository, which contains my user interface projects and homework assignments. This course focuses on UI design principles, metrics, and best practices, providing hands-on experience with web technologies like HTML, CSS, JavaScript, Bootstrap, and more.
