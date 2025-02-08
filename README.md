@@ -5,7 +5,17 @@
 Welcome to my **SWE 632** repository, which contains my user interface projects and homework assignments. This course focuses on UI design principles, metrics, and best practices, providing hands-on experience with web technologies like HTML, CSS, JavaScript, Bootstrap, and more.
 
 ---
+## Live Server Setup and Usage
 
+### Install Live Server Locally
+
+Run the following command in the project directory:
+
+npm install --save-dev live-server
+
+npm start
+
+---
 ## Table of Contents
 - [Overview](#overview)
 - [Projects](#projects)
