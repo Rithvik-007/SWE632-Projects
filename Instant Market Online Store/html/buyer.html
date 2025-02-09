@@ -1,66 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Buyer - Instant Market</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    .card img {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Instant Market</a>
+      <a class="navbar-brand" href="main.html">Instant Market</a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <div class="container">
+  <div class="container mt-4">
     <h2 class="text-center mb-4">Browse Products</h2>
     
     <!-- Search Bar -->
-    <input type="text" id="searchInput" class="form-control" placeholder="Search for products...">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." />
 
     <!-- Product List -->
     <div class="row mt-4" id="productList">
-      <!-- Sample Product Card 1 -->
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product Image">
-          <div class="card-body">
-            <h5 class="card-title">Sample Product 1</h5>
-            <p class="card-text">This is a short description of product 1.</p>
-            <p class="card-text"><strong>Price:</strong> $100</p>
-            <p class="card-text"><small class="text-muted">Seller: John Doe</small></p>
-            <a href="#" class="btn btn-primary">Buy Now</a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Sample Product Card 2 -->
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product Image">
-          <div class="card-body">
-            <h5 class="card-title">Sample Product 2</h5>
-            <p class="card-text">This is a short description of product 2.</p>
-            <p class="card-text"><strong>Price:</strong> $150</p>
-            <p class="card-text"><small class="text-muted">Seller: Jane Smith</small></p>
-            <a href="#" class="btn btn-primary">Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional product cards can be added here -->
+      <!-- Dynamic Products will be displayed here -->
     </div>
   </div>
 
-
-  <!-- Bootstrap JS and Custom JS -->
+  <!-- Bootstrap JS (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- If you have custom JS, include it here -->
-  <script src="scripts.js"></script>
+
+  <!-- Custom JS -->
+  <script>
+    // Function to display products
+    function displayProducts() {
+      const productList = document.getElementById("productList");
+
+      // Get products from localStorage
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+
+      // If no products exist, add default products
+      if (products.length === 0) {
+        const defaultProducts = [
+          {
+            name: "Guitar",
+            category: "Electronics",
+            description: "A high-quality electric guitar perfect for musicians.",
+            price: 350,
+            seller: "Alice",
+            image: "https://via.placeholder.com/300x200?text=Guitar"
+          },
+          {
+            name: "Gaming Laptop",
+            category: "Electronics",
+            description: "A powerful gaming laptop with the latest GPU and processor.",
+            price: 1200,
+            seller: "Bob",
+            image: "https://via.placeholder.com/300x200?text=Gaming+Laptop"
+          },
+          {
+            name: "Dove Soap",
+            category: "Personal Care",
+            description: "A moisturizing soap for smooth and soft skin.",
+            price: 5,
+            seller: "Emma",
+            image: "https://via.placeholder.com/300x200?text=Dove+Soap"
+          },
+          {
+            name: "Blue Jeans",
+            category: "Clothing",
+            description: "Comfortable and stylish blue jeans for everyday wear.",
+            price: 40,
+            seller: "John",
+            image: "https://via.placeholder.com/300x200?text=Blue+Jeans"
+          },
+          {
+            name: "Ux for Dummies by  Donald Chesnut and Kevin P. Nichols",
+            category: "Books",
+            description: "A comprehensive guide to user experience design.",
+            price: 25,
+            seller: "Sarah",
+            image: "https://via.placeholder.com/300x200?text=UX+for+Dummies"
+          }
+        ];
+        // Save default products to localStorage
+        localStorage.setItem("products", JSON.stringify(defaultProducts));
+        products = defaultProducts;
+      }
+
+      // Clear existing products
+      productList.innerHTML = "";
+
+      // Loop through products and display them
+      products.forEach((product, index) => {
+        const productCard = document.createElement("div");
+        productCard.classList.add("col-md-4", "mb-4");
+        productCard.innerHTML = `
+          <div class="card">
+            <img src="${product.image}" class="card-img-top" alt="${product.name}">
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">${product.description}</p>
+              <p class="card-text"><strong>Price:</strong> $${product.price}</p>
+              <p class="card-text"><small class="text-muted">Seller: ${product.seller}</small></p>
+              <button class="btn btn-primary buy-btn" data-index="${index}">Buy Now</button>
+            </div>
+          </div>
+        `;
+        productList.appendChild(productCard);
+      });
+
+      // Add event listeners to "Buy Now" buttons
+      document.querySelectorAll(".buy-btn").forEach(button => {
+        button.addEventListener("click", function () {
+          let index = this.getAttribute("data-index");
+          let boughtProduct = products[index];
+
+          // Show confirmation alert
+          alert(`You bought ${boughtProduct.name} for $${boughtProduct.price}`);
+
+          // Remove the product from the array
+          products.splice(index, 1);
+
+          // Update localStorage
+          localStorage.setItem("products", JSON.stringify(products));
+
+          // Re-render products
+          displayProducts();
+        });
+      });
+    }
+
+    // Call the displayProducts function when the page loads
+    window.onload = displayProducts;
+
+    // Search functionality
+    document.getElementById("searchInput").addEventListener("input", function() {
+      let searchQuery = this.value.toLowerCase();
+      let productCards = document.querySelectorAll(".col-md-4");
+
+      productCards.forEach(function(card) {
+        let productTitle = card.querySelector(".card-title").textContent.toLowerCase();
+        let productDescription = card.querySelector(".card-text").textContent.toLowerCase();
+
+        if (productTitle.includes(searchQuery) || productDescription.includes(searchQuery)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
