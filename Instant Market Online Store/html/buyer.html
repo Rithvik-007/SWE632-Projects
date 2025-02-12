@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Buyer - Instant Market</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../style/style.css">
   <style>
     body {
       background-color: #f8f9fa;
     }
-    .container {
-      margin-top: 20px;
-    }
+
     .card img {
       height: 200px;
-      object-fit: cover;
+      object-fit: contain;
     }
   </style>
 </head>
+
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="main.html">Instant Market</a>
     </div>
-  </nav>
+  </nav>-->
+  
+
+  <div class="container-fluid mt-2">
+    <a href="main.html" class="btn btn-primary back-to-main-btn">Back to Main</a>
+  </div>
+
 
   <!-- Main Content -->
-  <div class="container mt-4">
-    <h2 class="text-center mb-4">Browse Products</h2>
-    
+  <div class="container mt-1">
+    <h2 class="text-center mb-4">Browse Books</h2>
+
     <!-- Search Bar -->
     <input type="text" id="searchInput" class="form-control" placeholder="Search for products..." />
 
@@ -37,6 +44,17 @@
       <!-- Dynamic Products will be displayed here -->
     </div>
   </div>
+
+  <div id="chatbot">
+    <div id="chatbot-header">Chat Assistant</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+      <input type="text" id="chatbox" placeholder="Ask me something..."> <br>
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  <button id="Chatbutton">Assistant</button>
+
 
   <!-- Bootstrap JS (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -49,56 +67,50 @@
 
       // Get products from localStorage
       let products = JSON.parse(localStorage.getItem("products")) || [];
+      
 
       // If no products exist, add default products
       if (products.length === 0) {
         const defaultProducts = [
           {
-            name: "Guitar",
-            category: "Electronics",
-            description: "A high-quality electric guitar perfect for musicians.",
-            price: 350,
+            name: "Atomic Habits by James Clear",
+            description: "A guide to building good habits and breaking bad ones through small, consistent changes",
+            price: 30,
             seller: "Alice",
-            image: "https://via.placeholder.com/300x200?text=Guitar"
+            genre: "Self-Help",
+            image: "atmoicHabits.jpeg"
           },
           {
-            name: "Gaming Laptop",
-            category: "Electronics",
-            description: "A powerful gaming laptop with the latest GPU and processor.",
-            price: 1200,
+            name: "The Demon-Haunted World",
+            description: "A thought-provoking book that advocates for scientific skepticism and critical thinking.",
+            price: 25,
             seller: "Bob",
-            image: "https://via.placeholder.com/300x200?text=Gaming+Laptop"
+            genre: "Science",
+            image: "carl.jpeg"
           },
           {
-            name: "Dove Soap",
-            category: "Personal Care",
-            description: "A moisturizing soap for smooth and soft skin.",
-            price: 5,
+            name: "Palace of Illusions",
+            description: " A retelling of the Indian epic Mahabharata from the perspective of Draupadi, the wife of the five Pandava brothers.",
+            price: 50,
             seller: "Emma",
-            image: "https://via.placeholder.com/300x200?text=Dove+Soap"
+            genre: "Historical Fiction",
+            image: "The_palace_of_illusion.jpeg"
           },
           {
-            name: "Blue Jeans",
-            category: "Clothing",
-            description: "Comfortable and stylish blue jeans for everyday wear.",
+            name: "Rich Dad Poor Dad",
+            description: "It offers lessons on financial independence, investing, and entrepreneurship.",
             price: 40,
             seller: "John",
-            image: "https://via.placeholder.com/300x200?text=Blue+Jeans"
-          },
-          {
-            name: "Ux for Dummies by  Donald Chesnut and Kevin P. Nichols",
-            category: "Books",
-            description: "A comprehensive guide to user experience design.",
-            price: 25,
-            seller: "Sarah",
-            image: "https://via.placeholder.com/300x200?text=UX+for+Dummies"
+            genre: "Fashion",
+            image: "Rich_dad.jpeg"
           }
         ];
+    
         // Save default products to localStorage
         localStorage.setItem("products", JSON.stringify(defaultProducts));
         products = defaultProducts;
       }
-
+      localStorage.clear();
       // Clear existing products
       productList.innerHTML = "";
 
@@ -108,14 +120,15 @@
         productCard.classList.add("col-md-4", "mb-4");
         productCard.innerHTML = `
           <div class="card">
-            <img src="${product.image}" class="card-img-top" alt="${product.name}">
-            <div class="card-body">
-              <h5 class="card-title">${product.name}</h5>
-              <p class="card-text">${product.description}</p>
-              <p class="card-text"><strong>Price:</strong> $${product.price}</p>
-              <p class="card-text"><small class="text-muted">Seller: ${product.seller}</small></p>
-              <button class="btn btn-primary buy-btn" data-index="${index}">Buy Now</button>
-            </div>
+        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+        <div class="card-body">
+          <h5 class="card-title">${product.name}</h5> <br>
+          <p class="card-text">${product.description}</p> <br>
+          <p class="card-text"><strong>Price:</strong> $${product.price}</p>
+          <p class="card-text"><strong>Genre:</strong> ${product.genre}</p>
+          <p class="card-text"><small class="text-muted">Seller: ${product.seller}</small></p>
+          <button class="btn btn-primary buy-btn" data-index="${index}">Buy Now</button>
+        </div>
           </div>
         `;
         productList.appendChild(productCard);
@@ -146,11 +159,11 @@
     window.onload = displayProducts;
 
     // Search functionality
-    document.getElementById("searchInput").addEventListener("input", function() {
+    document.getElementById("searchInput").addEventListener("input", function () {
       let searchQuery = this.value.toLowerCase();
       let productCards = document.querySelectorAll(".col-md-4");
 
-      productCards.forEach(function(card) {
+      productCards.forEach(function (card) {
         let productTitle = card.querySelector(".card-title").textContent.toLowerCase();
         let productDescription = card.querySelector(".card-text").textContent.toLowerCase();
 
@@ -161,6 +174,38 @@
         }
       });
     });
+
+    document.getElementById('Chatbutton').addEventListener('click', function() {
+    var chatbot = document.getElementById('chatbot');
+    chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+  });
+  function sendMessage() {
+    var input = document.getElementById('chatbox');
+    var message = input.value;
+    input.value = '';
+
+    if (message.trim() !== '') {
+    var messagesContainer = document.getElementById('chat-messages');
+    var userDiv = document.createElement('div');
+    userDiv.textContent = 'You: ' + message;
+    messagesContainer.appendChild(userDiv);
+
+    // Respond with a basic message after 1 second delay
+    setTimeout(function() {
+      var botDiv = document.createElement('div');
+      botDiv.textContent = 'Chatbot: Hello, how can I help you today?';
+      messagesContainer.appendChild(botDiv);
+    }, 1000);
+    }
+  }
+
+  // Add event listener for Enter key press
+  document.getElementById('chatbox').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+    sendMessage();
+    }
+  });
   </script>
 </body>
+
 </html>

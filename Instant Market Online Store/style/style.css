@@ -3,41 +3,82 @@
 /* Global Styles */
 body {
   font-family: Arial, sans-serif;
-  background: #f8f9fa;  /* Light gray background */
+  background: #e8e9ea;
+
   color: #333;
   margin: 0;
   padding: 0;
 }
-
 /* Navbar Customization */
 .navbar {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-/* Main Container Spacing */
+/* Container Styles */
 .container {
-  margin-top: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Product Card Styling for Buyer Page */
-.card {
+.back-to-main-btn {
+  background-color: #007bff; /* Example: Specific blue shade */
+  color: white;
+  left: 20px;
+  padding: 12px 24px;
+  border-radius: 5px;
+  text-decoration: none; /* Removes underline from link */
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.back-to-main-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Reduce gap between container paragraph and heading */
+.container p {
+  margin-top: -20px;
+}
+
+
+.card-body {
+  border: 1px solid #ccc;
+  border-radius: auto;
+  background: #a8a9aa44;
+  padding: 15px; /* Added inner spacing */
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
+.card button{
+  background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
 /* Search Bar Styling */
 #searchInput {
-  max-width: 400px;
+  max-width: 1300px;
   margin: 0 auto 20px;
   display: block;
+  margin-left: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.137);
 }
 
 /* Seller Form Container */
 .form-container {
   max-width: 600px;
+  
+  height: 600px auto;
   margin: 0 auto;
   background: #cfcfcf;
   padding: 20px;
@@ -52,3 +93,63 @@ body {
 .form-container label {
   font-weight: bold;
 }
+
+/* Chatbot styles */
+#chatbot {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 300px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  display: none;
+}
+
+#chatbot-header {
+  background-color: #5f28df;
+  color: #f1f1f1;
+  padding: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#chat-messages {
+  height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background: #fff;
+}
+
+#chat-input {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+#chat-input button {
+  padding: 8px 16px;
+  margin-top: 10px;
+  background: #5f28df;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+#chat-input input {
+  width: calc(100% - 60px);
+  padding: 8px;
+  margin-right: 4px;
+}
+
+#Chatbutton{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer; /* Makes it clear the button is clickable */
+  outline: none; /* Removes the focus border */
+}
+

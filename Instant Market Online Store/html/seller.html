@@ -8,39 +8,40 @@
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+ <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="main.html">Instant Market</a>
     </div>
-  </nav>
+  </nav>-->
 
   <!-- Back to Main Page Button -->
-  <div class="container mt-4">
-    <a href="main.html" class="btn btn-primary">Back to Main</a>
+  <div class="container-fluid mt-2">
+    <a href="main.html" class="btn btn-primary back-to-main-btn">Back to Main</a>
   </div>
 
   <!-- Main Content -->
-  <div class="container mt-4">
-    <h2 class="text-center mb-4">Sell Your Product</h2>
+  <div class="container-fluid mt-2">
+    <h2 class="text-center mb-4">Sell Your Book</h2>
     
     <!-- Seller Form -->
     <div class="form-container">
       <form id="productForm">
         <div class="mb-3">
-          <label for="productName" class="form-label">Product Name</label>
-          <input type="text" id="productName" class="form-control" placeholder="Enter product name" required />
+          <label for="productName" class="form-label">Book Name<span style="color: red;">*</span></label>
+          <input type="text" id="productName" class="form-control" placeholder="Enter Book name" required />
         </div>
 
         <div class="mb-3">
-          <label for="category" class="form-label">Category</label>
+          <label for="category" class="form-label">Genres</label>
           <select id="category" class="form-select" required>
             <option value="">Select a category</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Books">Books</option>
-            <option value="Home">Home</option>
-            <option value="food">Food</option> <!-- Newly added category -->
-            <option value="Cosmetics">Cosmetics</option> 
+            <option value="Fiction">Fiction</option>
+            <option value="Novel">Novel</option>
+            <option value="Narrative">Narrative</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Historical Fiction">Historical Fiction</option> 
+            <option value="Thriller">Thriller</option> 
+            <option value="Horror fiction">Horror fiction</option>
           </select>
         </div>
 
@@ -50,16 +51,25 @@
         </div>
 
         <div class="mb-3">
-          <label for="price" class="form-label">Price ($)</label>
+          <label for="price" class="form-label">Price ($)<span style="color: red;">*</span></label>
           <input type="number" id="price" class="form-control" placeholder="Enter your asking price" required />
         </div>
 
         <div class="mb-3">
-          <label for="sellerName" class="form-label">Your Name</label>
+          <label for="sellerName" class="form-label">Your Name<span style="color: red;">*</span></label>
           <input type="text" id="sellerName" class="form-control" placeholder="Enter your name" required />
         </div>
 
-        <button type="submit" class="btn btn-success w-100">Submit Product</button>
+        <div class="mb-3"></div>
+          <label for="productImage" class="form-label">Product Image (optional)</label>
+          <input type="url" id="productImage" class="form-control" placeholder="Enter image URL" />
+          <br>
+        
+
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-success w-100">Submit Product</button>
+        </div>
+      </div>
       </form>
     </div>
   </div>
@@ -78,6 +88,7 @@
       const description = document.getElementById("description").value;
       const price = document.getElementById("price").value;
       const sellerName = document.getElementById("sellerName").value;
+      const productImage = document.getElementById("productImage").value || "https://via.placeholder.com/300x200";
 
       // Create product object
       const product = {
@@ -86,7 +97,7 @@
         description: description,
         price: price,
         seller: sellerName,
-        image: "https://via.placeholder.com/300x200", // Placeholder image for now
+        image: productImage,
       };
 
       // Get existing products from localStorage or create an empty array
@@ -105,5 +116,3 @@
       document.getElementById("productForm").reset();
     });
   </script>
-</body>
-</html>
