@@ -22,6 +22,15 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+.book-bazaar-background {
+  color: #ffffff;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('unsplash.jpg'); /* Adjust the path as necessary */
+  background-size: cover; /* Ensure the image covers the entire container */
+  background-position: center; /* Center the image within the container */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  height: 100vh; /* Optional: Makes sure the container takes up the full viewport height */
+}
+
 
 .back-to-main-btn {
   background-color: #007bff; /* Example: Specific blue shade */
