@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Advisor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Academic Advisor</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Select Your Major</h3>
+                <select id="major" class="form-select">
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Business">Business</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Biology">Biology</option>
+                </select>
+                <button class="btn btn-primary mt-2" onclick="suggestStudyPlan()">Get Study Plan</button>
+                <div id="studyPlan" class="mt-3"></div>
+            </div>
+            <div class="col-md-6">
+                <h3>Semester Schedule</h3>
+                <input type="text" id="courses" class="form-control" placeholder="Enter courses, separated by commas">
+                <button class="btn btn-success mt-2" onclick="generateSchedule()">Generate Schedule</button>
+                <div id="schedule" class="mt-3"></div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h3>Financial Aid Assistance</h3>
+                <button class="btn btn-warning" onclick="getFinancialAid()">Check Eligibility</button>
+                <div id="financialAid" class="mt-3"></div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h3>AI-Based Advisor Chatbot</h3>
+                <input type="text" id="aiInput" class="form-control" placeholder="Ask the AI Academic Advisor">
+                <button class="btn btn-dark mt-2" onclick="getAIResponse()">Ask AI</button>
+                <div id="aiResponse" class="mt-3 alert alert-secondary"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function suggestStudyPlan() {
+            const major = document.getElementById("major").value;
+            let plan = "";
+            switch (major) {
+                case "Computer Science":
+                    plan = "Suggested Courses: Data Structures, Algorithms, Machine Learning";
+                    break;
+                case "Business":
+                    plan = "Suggested Courses: Marketing, Finance, Business Analytics";
+                    break;
+                case "Engineering":
+                    plan = "Suggested Courses: Thermodynamics, Circuit Design, Robotics";
+                    break;
+                case "Biology":
+                    plan = "Suggested Courses: Genetics, Microbiology, Biochemistry";
+                    break;
+                default:
+                    plan = "Please select a valid major.";
+            }
+            document.getElementById("studyPlan").innerHTML = `<div class='alert alert-info'>${plan}</div>`;
+        }
+        
+        function generateSchedule() {
+            const courses = document.getElementById("courses").value;
+            if (!courses) {
+                document.getElementById("schedule").innerHTML = "<div class='alert alert-danger'>Please enter courses.</div>";
+                return;
+            }
+            const courseList = courses.split(",").map(course => course.trim());
+            let scheduleHTML = "<ul class='list-group'>";
+            courseList.forEach(course => {
+                scheduleHTML += `<li class='list-group-item'>${course}</li>`;
+            });
+            scheduleHTML += "</ul>";
+            document.getElementById("schedule").innerHTML = scheduleHTML;
+        }
+        
+        function getFinancialAid() {
+            document.getElementById("financialAid").innerHTML = `<div class='alert alert-success'>You may be eligible for grants, scholarships, or student loans. Check the financial aid office for more details.</div>`;
+        }
+        
+        function getAIResponse() {
+            const userInput = document.getElementById("aiInput").value;
+            if (!userInput) {
+                document.getElementById("aiResponse").innerHTML = "<div class='alert alert-danger'>Please enter a question.</div>";
+                return;
+            }
+            
+            const aiResponses = {
+                "best major": "Choosing the best major depends on your interests and job market trends. Consider Computer Science for tech jobs, Business for management roles, and Engineering for technical careers.",
+                "financial aid": "You may be eligible for grants, scholarships, or student loans. Check with your university's financial aid office for specific options.",
+                "study plan": "A good study plan includes core courses related to your major, general education requirements, and elective courses that interest you.",
+                "schedule advice": "Balance your schedule with a mix of easy and difficult courses. Avoid taking too many challenging subjects in one semester."
+            };
+            
+            let response = aiResponses[userInput.toLowerCase()] || "I'm still learning! Please consult your academic advisor for detailed guidance.";
+            document.getElementById("aiResponse").innerHTML = `<div class='alert alert-info'>${response}</div>`;
+        }
+    </script>
+</body>
+</html>
