@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard - Academic Advisor</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar with light green background -->
+  <nav class="navbar navbar-expand-lg" id="studentNavbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('questionsSection')">Student Questions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('selectCourseSection')">Select Course</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('coursePlanSection')">Course Plan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('semesterScheduleSection')">Semester Schedule</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('financialAidSection')">Financial Aid</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="container mt-4">
+    <!-- Feature 1: Student Questions -->
+    <div id="questionsSection" class="feature-page">
+      <h2>Student Self-Assessment</h2>
+      <p>Click the button to view sample questions to help you reflect on your academic preferences:</p>
+      <button class="btn btn-info mb-3" onclick="toggleVisibility('questionsList')">Toggle Questions</button>
+      <div id="questionsList" class="d-none">
+        <ul>
+          <li><strong>Q:</strong> Which subjects ignite your passion?</li>
+          <li><strong>Q:</strong> What skills do you excel in?</li>
+          <li><strong>Q:</strong> How do you envision your future career?</li>
+          <li><strong>Q:</strong> What type of learning environment suits you best?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Feature 2: Select Course -->
+    <div id="selectCourseSection" class="feature-page" style="display: none;">
+      <h2>Select Your Course</h2>
+      <p>Choose the course (or major) you’re interested in from the list below:</p>
+      <select id="courseDropdown" class="form-select mb-3" style="max-width: 300px;">
+      <option value="">-- Choose a Course --</option>
+      <option value="Computer Science">Computer Science</option>
+      <option value="Business">Business</option>
+      <option value="Engineering">Engineering</option>
+      <option value="Biology">Biology</option>
+      </select>
+      <button class="btn btn-primary" onclick="saveCourse()">Submit Course</button>
+      <div id="courseFeedback" class="mt-3"></div>
+    </div>
+
+    <!-- Chat Bot -->
+    <div id="chatBot" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: #28a745; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold;" onclick="toggleChat()">
+      Chat
+    </div>
+    <div id="chatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column;">
+      <div style="background-color: #28a745; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Chat Bot</div>
+      <div id="chatContent" style="flex: 1; padding: 10px; overflow-y: auto;"></div>
+      <input type="text" id="chatInput" style="border: 10px; border-top: 1px solid #ccc; padding: 10px; width: calc(100% - 20px); box-sizing: border-box; margin: 10px 10px 10px;" placeholder="Type a message..." onkeypress="handleChatInput(event)">
+    </div>
+
+
+    <!-- Feature 3: Course Plan (Overall Study Plan) -->
+    <div id="coursePlanSection" class="feature-page" style="display: none;">
+      <h2>Your Personalized Course Plan</h2>
+      <p>The following table shows the recommended courses for your selected course:</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Credit Hours</th>
+            <th>Professor</th>
+          </tr>
+        </thead>
+        <tbody id="coursePlanTable">
+          <!-- Course plan rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+      <button class="btn btn-success" onclick="generatePlan()">Generate Plan</button>
+    </div>
+
+    <!-- Feature 4: Semester Schedule -->
+    <div id="semesterScheduleSection" class="feature-page" style="display: none;">
+      <h2>Semester Schedule</h2>
+      <p>Below is your schedule for the upcoming semester. Click on "Register" for a course to enroll.</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Credit Hours</th>
+            <th>Professor</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="semesterScheduleTable">
+          <!-- Semester schedule rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+      <button class="btn btn-primary" onclick="generateSemesterSchedule()">Generate Semester Schedule</button>
+    </div>
+
+    <!-- Feature 5: Financial Aid -->
+    <div id="financialAidSection" class="feature-page" style="display: none;">
+      <h2>Financial Aid Guidance</h2>
+      <p>Fill in your details and click submit for financial aid advice:</p>
+      <form id="aidForm">
+        <div class="mb-3">
+          <label for="studentName" class="form-label">Name:</label>
+          <input type="text" id="studentName" class="form-control" placeholder="Your name">
+        </div>
+        <div class="mb-3">
+          <label for="studentID" class="form-label">Student ID:</label>
+          <input type="text" id="studentID" class="form-control" placeholder="Your student ID">
+        </div>
+        <div class="mb-3">
+          <label for="aidReason" class="form-label">Why do you need aid?</label>
+          <textarea id="aidReason" class="form-control" rows="3" placeholder="Describe your financial situation"></textarea>
+        </div>
+        <button type="button" class="btn btn-warning" onclick="submitAid()">Submit</button>
+      </form>
+      <div id="aidFeedback" class="mt-3"></div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Global variable to store the selected course
+    let selectedCourse = "";
+
+    // Function to load a specific feature section
+    function loadFeature(sectionId) {
+      const sections = document.querySelectorAll('.feature-page');
+      sections.forEach(section => section.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Toggle the visibility of an element (used for the questions list)
+    function toggleVisibility(elementId) {
+      const elem = document.getElementById(elementId);
+      elem.classList.toggle('d-none');
+    }
+
+    // Save the course selected by the user
+    function saveCourse() {
+      selectedCourse = document.getElementById('courseDropdown').value;
+      if (!selectedCourse) {
+        document.getElementById('courseFeedback').innerHTML = `<div class="alert alert-danger">Please select a course.</div>`;
+      } else {
+        document.getElementById('courseFeedback').innerHTML = `<div class="alert alert-success">You chose: <strong>${selectedCourse}</strong></div>`;
+      }
+    }
+
+    function toggleChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function handleChatInput(event) {
+      if (event.key === 'Enter') {
+      const chatContent = document.getElementById('chatContent');
+      const chatInput = document.getElementById('chatInput');
+      const message = chatInput.value.trim();
+      if (message) {
+        const userMessage = document.createElement('div');
+        userMessage.textContent = `You: ${message}`;
+        userMessage.style.textAlign = 'right';
+        userMessage.style.margin = '5px 0';
+        userMessage.style.backgroundColor = '#e9ecef';
+        userMessage.style.padding = '5px';
+        userMessage.style.borderRadius = '5px';
+        chatContent.appendChild(userMessage);
+        chatInput.value = '';
+        // Simulate bot response
+        setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.textContent = `Bot: This is a response from the bot.`;
+        botMessage.style.textAlign = 'left';
+        botMessage.style.margin = '5px 0';
+        botMessage.style.backgroundColor = '#f8f9fa';
+        botMessage.style.padding = '5px';
+        botMessage.style.borderRadius = '5px';
+        chatContent.appendChild(botMessage);
+        chatContent.scrollTop = chatContent.scrollHeight;
+        }, 1000);
+      }
+      }
+    }
+
+    // Generate a dummy course plan based on the selected course
+    function generatePlan() {
+      if (!selectedCourse) {
+        document.getElementById('coursePlanTable').innerHTML = `<tr><td colspan="4" class="text-danger">Select a course in the "Select Your Course" section first.</td></tr>`;
+        return;
+      }
+      let courses = [];
+      // Define some sample courses for each major
+      if (selectedCourse === "Computer Science") {
+        courses = [
+          { code: "CS101", name: "Intro to Programming", credit: 3, professor: "Dr. Smith" },
+          { code: "CS201", name: "Data Structures", credit: 4, professor: "Dr. Johnson" },
+          { code: "CS301", name: "Algorithms", credit: 3, professor: "Dr. Brown" },
+          { code: "CS401", name: "Operating Systems", credit: 3, professor: "Dr. Green" },
+          { code: "CS501", name: "Machine Learning", credit: 4, professor: "Dr. Black" },
+          { code: "CS601", name: "Artificial Intelligence", credit: 3, professor: "Dr. White" },
+          { code: "CS701", name: "Computer Networks", credit: 3, professor: "Dr. Grey" },
+          { code: "CS801", name: "Database Systems", credit: 4, professor: "Dr. Blue" },
+          { code: "CS901", name: "Cyber Security", credit: 3, professor: "Dr. Violet" },
+          { code: "CS1001", name: "Software Engineering", credit: 4, professor: "Dr. Indigo" }
+        ];
+      } else if (selectedCourse === "Business") {
+        courses = [
+          { code: "BUS101", name: "Principles of Management", credit: 3, professor: "Dr. Davis" },
+          { code: "BUS201", name: "Marketing Fundamentals", credit: 3, professor: "Dr. White" },
+          { code: "BUS301", name: "Financial Accounting", credit: 4, professor: "Dr. Miller" },
+          { code: "BUS401", name: "Business Ethics", credit: 3, professor: "Dr. Clark" },
+          { code: "BUS501", name: "Corporate Finance", credit: 4, professor: "Dr. Lewis" },
+          { code: "BUS601", name: "Human Resource Management", credit: 3, professor: "Dr. Walker" },
+          { code: "BUS701", name: "International Business", credit: 3, professor: "Dr. Hall" },
+          { code: "BUS801", name: "Strategic Management", credit: 4, professor: "Dr. Allen" },
+          { code: "BUS901", name: "Entrepreneurship", credit: 3, professor: "Dr. King" },
+          { code: "BUS1001", name: "Supply Chain Management", credit: 4, professor: "Dr. Wright" }
+        ];
+      } else if (selectedCourse === "Engineering") {
+        courses = [
+          { code: "ENG101", name: "Engineering Mechanics", credit: 3, professor: "Dr. Lee" },
+          { code: "ENG201", name: "Thermodynamics", credit: 4, professor: "Dr. Wilson" },
+          { code: "ENG301", name: "Circuits", credit: 3, professor: "Dr. Taylor" },
+          { code: "ENG401", name: "Fluid Mechanics", credit: 3, professor: "Dr. Harris" },
+          { code: "ENG501", name: "Materials Science", credit: 4, professor: "Dr. Martin" },
+          { code: "ENG601", name: "Control Systems", credit: 3, professor: "Dr. Thompson" },
+          { code: "ENG701", name: "Heat Transfer", credit: 3, professor: "Dr. Garcia" },
+          { code: "ENG801", name: "Structural Analysis", credit: 4, professor: "Dr. Martinez" },
+          { code: "ENG901", name: "Robotics", credit: 3, professor: "Dr. Brown" },
+          { code: "ENG1001", name: "Renewable Energy", credit: 4, professor: "Dr. Green" }
+        ];
+      } else if (selectedCourse === "Biology") {
+        courses = [
+          { code: "BIO101", name: "General Biology", credit: 3, professor: "Dr. Anderson" },
+          { code: "BIO201", name: "Genetics", credit: 4, professor: "Dr. Thompson" },
+          { code: "BIO301", name: "Ecology", credit: 3, professor: "Dr. Martinez" },
+          { code: "BIO401", name: "Microbiology", credit: 3, professor: "Dr. Robinson" },
+          { code: "BIO501", name: "Cell Biology", credit: 4, professor: "Dr. Clark" },
+          { code: "BIO601", name: "Molecular Biology", credit: 3, professor: "Dr. Rodriguez" },
+          { code: "BIO701", name: "Biochemistry", credit: 3, professor: "Dr. Lewis" },
+          { code: "BIO801", name: "Immunology", credit: 4, professor: "Dr. Lee" },
+          { code: "BIO901", name: "Neuroscience", credit: 3, professor: "Dr. White" },
+          { code: "BIO1001", name: "Evolutionary Biology", credit: 4, professor: "Dr. Black" }
+        ];
+      }
+      
+      // Build the table rows
+      let tableHTML = "";
+      courses.forEach(course => {
+        tableHTML += `<tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credit}</td>
+                        <td>${course.professor}</td>
+                      </tr>`;
+      });
+      document.getElementById('coursePlanTable').innerHTML = tableHTML;
+    }
+
+    // Generate a dummy semester schedule with registration option
+    function generateSemesterSchedule() {
+      if (!selectedCourse) {
+      document.getElementById('semesterScheduleTable').innerHTML = `<tr><td colspan="5" class="text-danger">Select a course in the "Select Your Course" section first.</td></tr>`;
+      return;
+      }
+      let courses = [];
+      // For simplicity, using the same course list as the overall plan.
+      if (selectedCourse === "Computer Science") {
+      courses = [
+        { code: "CS101", name: "Intro to Programming", credit: 3, professor: "Dr. Smith" },
+        { code: "CS201", name: "Data Structures", credit: 4, professor: "Dr. Johnson" },
+        { code: "CS301", name: "Algorithms", credit: 3, professor: "Dr. Brown" },
+        { code: "CS401", name: "Operating Systems", credit: 3, professor: "Dr. Green" },
+        { code: "CS501", name: "Machine Learning", credit: 4, professor: "Dr. Black" },
+        { code: "CS601", name: "Artificial Intelligence", credit: 3, professor: "Dr. White" },
+        { code: "CS701", name: "Computer Networks", credit: 3, professor: "Dr. Grey" },
+        { code: "CS801", name: "Database Systems", credit: 4, professor: "Dr. Blue" },
+        { code: "CS901", name: "Cyber Security", credit: 3, professor: "Dr. Violet" },
+        { code: "CS1001", name: "Software Engineering", credit: 4, professor: "Dr. Indigo" }
+      ];
+      } else if (selectedCourse === "Business") {
+      courses = [
+        { code: "BUS101", name: "Principles of Management", credit: 3, professor: "Dr. Davis" },
+        { code: "BUS201", name: "Marketing Fundamentals", credit: 3, professor: "Dr. White" },
+        { code: "BUS301", name: "Financial Accounting", credit: 4, professor: "Dr. Miller" },
+        { code: "BUS401", name: "Business Ethics", credit: 3, professor: "Dr. Clark" },
+        { code: "BUS501", name: "Corporate Finance", credit: 4, professor: "Dr. Lewis" },
+        { code: "BUS601", name: "Human Resource Management", credit: 3, professor: "Dr. Walker" },
+        { code: "BUS701", name: "International Business", credit: 3, professor: "Dr. Hall" },
+        { code: "BUS801", name: "Strategic Management", credit: 4, professor: "Dr. Allen" },
+        { code: "BUS901", name: "Entrepreneurship", credit: 3, professor: "Dr. King" },
+        { code: "BUS1001", name: "Supply Chain Management", credit: 4, professor: "Dr. Wright" }
+      ];
+      } else if (selectedCourse === "Engineering") {
+      courses = [
+        { code: "ENG101", name: "Engineering Mechanics", credit: 3, professor: "Dr. Lee" },
+        { code: "ENG201", name: "Thermodynamics", credit: 4, professor: "Dr. Wilson" },
+        { code: "ENG301", name: "Circuits", credit: 3, professor: "Dr. Taylor" },
+        { code: "ENG401", name: "Fluid Mechanics", credit: 3, professor: "Dr. Harris" },
+        { code: "ENG501", name: "Materials Science", credit: 4, professor: "Dr. Martin" },
+        { code: "ENG601", name: "Control Systems", credit: 3, professor: "Dr. Thompson" },
+        { code: "ENG701", name: "Heat Transfer", credit: 3, professor: "Dr. Garcia" },
+        { code: "ENG801", name: "Structural Analysis", credit: 4, professor: "Dr. Martinez" },
+        { code: "ENG901", name: "Robotics", credit: 3, professor: "Dr. Brown" },
+        { code: "ENG1001", name: "Renewable Energy", credit: 4, professor: "Dr. Green" }
+      ];
+      } else if (selectedCourse === "Biology") {
+      courses = [
+        { code: "BIO101", name: "General Biology", credit: 3, professor: "Dr. Anderson" },
+        { code: "BIO201", name: "Genetics", credit: 4, professor: "Dr. Thompson" },
+        { code: "BIO301", name: "Ecology", credit: 3, professor: "Dr. Martinez" },
+        { code: "BIO401", name: "Microbiology", credit: 3, professor: "Dr. Robinson" },
+        { code: "BIO501", name: "Cell Biology", credit: 4, professor: "Dr. Clark" },
+        { code: "BIO601", name: "Molecular Biology", credit: 3, professor: "Dr. Rodriguez" },
+        { code: "BIO701", name: "Biochemistry", credit: 3, professor: "Dr. Lewis" },
+        { code: "BIO801", name: "Immunology", credit: 4, professor: "Dr. Lee" },
+        { code: "BIO901", name: "Neuroscience", credit: 3, professor: "Dr. White" },
+        { code: "BIO1001", name: "Evolutionary Biology", credit: 4, professor: "Dr. Black" }
+      ];
+      }
+
+      // Split courses into Fall and Spring semesters
+      const fallCourses = courses.slice(0, Math.ceil(courses.length / 2));
+      const springCourses = courses.slice(Math.ceil(courses.length / 2));
+
+      // Build the semester schedule table with a "Register" button for each row
+      let tableHTML = "<tr><th colspan='5'>Fall Semester</th></tr>";
+      fallCourses.forEach(course => {
+      tableHTML += `<tr>
+              <td>${course.code}</td>
+              <td>${course.name}</td>
+              <td>${course.credit}</td>
+              <td>${course.professor}</td>
+              <td><button class="btn btn-primary btn-sm" onclick="registerCourse('${course.code}', '${course.name}', ${course.credit}, '${course.professor}')">Register</button></td>
+              </tr>`;
+      });
+      tableHTML += "<tr><th colspan='5'>Spring Semester</th></tr>";
+      springCourses.forEach(course => {
+      tableHTML += `<tr>
+              <td>${course.code}</td>
+              <td>${course.name}</td>
+              <td>${course.credit}</td>
+              <td>${course.professor}</td>
+              <td><button class="btn btn-primary btn-sm" onclick="registerCourse('${course.code}', '${course.name}', ${course.credit}, '${course.professor}')">Register</button></td>
+              </tr>`;
+      });
+      document.getElementById('semesterScheduleTable').innerHTML = tableHTML;
+    }
+      // Build the semester schedule table with a "Register" button for each row
+      let tableHTML = "";
+      courses.forEach(course => {
+        tableHTML += `<tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credit}</td>
+                        <td>${course.professor}</td>
+                        <td><button class="btn btn-primary btn-sm" onclick="registerCourse('${course.code}', '${course.name}', ${course.credit}, '${course.professor}')">Register</button></td>
+                      </tr>`;
+      });
+      document.getElementById('semesterScheduleTable').innerHTML = tableHTML;
+    
+
+    // Function to simulate course registration with an alert
+    function registerCourse(code, name, credit, professor) {
+      alert(`You have registered for ${code} - ${name}\nCredit Hours: ${credit}\nProfessor: ${professor}`);
+    }
+
+    // Process and display financial aid submission feedback
+    function submitAid() {
+      const name = document.getElementById('studentName').value;
+      const id = document.getElementById('studentID').value;
+      const reason = document.getElementById('aidReason').value;
+      if (!name || !id || !reason) {
+        document.getElementById('aidFeedback').innerHTML = `<div class="alert alert-danger">All fields are required.</div>`;
+      } else {
+        document.getElementById('aidFeedback').innerHTML = `<div class="alert alert-success">Financial aid request submitted for ${name} (ID: ${id}).</div>`;
+      }
+    }
+    
+    // Optionally, load the first feature by default
+    loadFeature('questionsSection');
+  </script>
+</body>
+</html>

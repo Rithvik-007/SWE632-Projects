@@ -1,0 +1,77 @@
+/* styles.css */
+
+/* Left section with background image */
+.left-section {
+    position: relative;
+    background: url('students.jpg') no-repeat center left;
+    background-size: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Skyblue overlay with 20% opacity */
+  .left-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: skyblue;
+    opacity: 0.2;
+    border-right: 2px solid black;
+    
+  }
+  
+  /* Optionally, style the right section if needed */
+  .right-section {
+    background-color: #ebe7dfa8; /* light background for contrast */
+  }
+  
+.right-section h1 {
+    font-size: 50px;
+    font-weight: bold;
+    color: #691f1f;
+}
+.right-section p {
+    font-size: 20px;
+    color: #691f1f;
+}
+
+.right-section a {
+    background-color: #080808;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 20px;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.right-section a:hover {
+    background-color: #691f1f;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+
+/* student.css */
+
+
+/* styles.css */
+
+/* Light green background for the navigation bar */
+/* styles.css */
+
+/* Light green background for navbar */
+#studentNavbar {
+  background-color: #90ee90 !important;
+}
+
+/* Optional: basic spacing and styling for feature sections */
+.feature-page {
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+
