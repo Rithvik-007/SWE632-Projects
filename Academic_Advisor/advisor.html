@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advisor Portal - Academic Advisor</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar (light green background) -->
+  <nav class="navbar navbar-expand-lg" id="advisorNavbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#advisorNavContent" aria-controls="advisorNavContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="advisorNavContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadAdvisorSection('overallStudyPlanSection')">Overall Study Plan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadAdvisorSection('courseListSection')">Course List for Each Semester</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadAdvisorSection('studentListSection')">Student List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="loadAdvisorSection('financialAidSection')">Financial Aid Review</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="container mt-4">
+    <!-- Section 1: Overall Study Plan -->
+    <div id="overallStudyPlanSection" class="advisor-feature">
+      <h2>Overall Study Plan</h2>
+      <p>Select a course (major) to view the available study plan:</p>
+      <div class="mb-3" style="max-width: 300px;">
+        <select id="overallCourseDropdown" class="form-select">
+          <option value="">-- Choose a Course --</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Business">Business</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Biology">Biology</option>
+        </select>
+      </div>
+      <button class="btn btn-success mb-3" onclick="generateOverallPlan()">Generate Overall Plan</button>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Credit Hours</th>
+            <th>Professor</th>
+          </tr>
+        </thead>
+        <tbody id="overallPlanTable">
+          <!-- Course plan rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 2: Course List for Each Semester -->
+    <div id="courseListSection" class="advisor-feature" style="display: none;">
+      <h2>Course List for Each Semester</h2>
+      <p>The table below shows the semester schedule based on the selected course. It is split into Fall and Spring semesters.</p>
+      <button class="btn btn-primary mb-3" onclick="generateSemesterScheduleAdvisor()">Generate Semester Schedule</button>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Credit Hours</th>
+            <th>Professor</th>
+
+          </tr>
+        </thead>
+        <tbody id="semesterScheduleTableAdvisor">
+          <!-- Semester schedule rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 3: Student List -->
+    <div id="studentListSection" class="advisor-feature" style="display: none;">
+      <h2>Student List</h2>
+      <p>The table below shows a list of students and their selected courses:</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Student ID</th>
+            <th>Selected Course</th>
+          </tr>
+        </thead>
+        <tbody id="studentListTable">
+          <!-- Student rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+      <button class="btn btn-info" onclick="generateStudentList()">Load Student List</button>
+    </div>
+
+    <!-- Section 4: Financial Aid Review -->
+    <div id="financialAidSection" class="advisor-feature" style="display: none;">
+      <h2>Financial Aid Review</h2>
+      <p>Review the financial aid applications submitted by students below:</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Student ID</th>
+            <th>Requested Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="financialAidTable">
+          <!-- Financial aid application rows will be inserted here dynamically -->
+        </tbody>
+      </table>
+      <button class="btn btn-warning" onclick="generateFinancialAidApplications()">Load Financial Aid Applications</button>
+    </div>
+  </div>
+
+  <!-- Chat Bot Widget -->
+  <div id="chatBot" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: #28a745; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold; z-index: 1000;" onclick="toggleChat()">
+    Chat
+  </div>
+  <div id="chatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column; z-index: 1000;">
+    <div id="chatHeader" style="background-color: #28a745; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; font-size: 16px; font-weight: bold;">Chat Bot</div>
+    <div id="chatContent" style="flex: 1; padding: 10px; overflow-y: auto; font-size: 14px;"></div>
+    <input type="text" id="chatInput" style="border: none; border-top: 1px solid #ccc; padding: 10px; width: calc(100% - 20px); outline: none;" placeholder="Type a message..." onkeypress="handleChatInput(event)">
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Global variable to store the selected course
+    let selectedCourse = "";
+
+    /* -------------------------
+       Advisor Section Navigation
+    -------------------------- */
+    function loadAdvisorSection(sectionId) {
+      const sections = document.querySelectorAll('.advisor-feature');
+      sections.forEach(section => section.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+    }
+
+    /* -------------------------
+       Overall Study Plan Functions
+    -------------------------- */
+    function generateOverallPlan() {
+      selectedCourse = document.getElementById('overallCourseDropdown').value;
+      const tableBody = document.getElementById('overallPlanTable');
+      tableBody.innerHTML = "";
+      
+      if (!selectedCourse) {
+        tableBody.innerHTML = `<tr><td colspan="4" class="text-danger">Please select a course from the dropdown.</td></tr>`;
+        return;
+      }
+      
+      let courses = [];
+    // Dummy course data for each major
+    if (selectedCourse === "Computer Science") {
+      courses = [
+        { code: "CS101", name: "Intro to Programming", credit: 3, professor: "Dr. Smith" },
+        { code: "CS201", name: "Data Structures", credit: 4, professor: "Dr. Johnson" },
+        { code: "CS301", name: "Algorithms", credit: 3, professor: "Dr. Brown" },
+        { code: "CS401", name: "Operating Systems", credit: 3, professor: "Dr. Green" },
+        { code: "CS501", name: "Machine Learning", credit: 4, professor: "Dr. Black" },
+        { code: "CS601", name: "Artificial Intelligence", credit: 3, professor: "Dr. White" },
+        { code: "CS701", name: "Computer Networks", credit: 3, professor: "Dr. Grey" },
+        { code: "CS801", name: "Database Systems", credit: 4, professor: "Dr. Blue" },
+        { code: "CS901", name: "Cyber Security", credit: 3, professor: "Dr. Violet" },
+        { code: "CS1001", name: "Software Engineering", credit: 4, professor: "Dr. Indigo" }
+      ];
+    } else if (selectedCourse === "Business") {
+    courses = [
+      { code: "BUS101", name: "Principles of Management", credit: 3, professor: "Dr. Davis" },
+      { code: "BUS201", name: "Marketing Fundamentals", credit: 3, professor: "Dr. White" },
+      { code: "BUS301", name: "Financial Accounting", credit: 4, professor: "Dr. Miller" },
+      { code: "BUS401", name: "Business Ethics", credit: 3, professor: "Dr. Clark" },
+      { code: "BUS501", name: "Corporate Finance", credit: 4, professor: "Dr. Lewis" },
+      { code: "BUS601", name: "HR Management", credit: 3, professor: "Dr. Walker" },
+      { code: "BUS701", name: "International Business", credit: 3, professor: "Dr. Hall" },
+      { code: "BUS801", name: "Strategic Management", credit: 4, professor: "Dr. Allen" },
+      { code: "BUS901", name: "Entrepreneurship", credit: 3, professor: "Dr. King" },
+      { code: "BUS1001", name: "Supply Chain Management", credit: 4, professor: "Dr. Wright" }
+    ];
+    } else if (selectedCourse === "Engineering") {
+    courses = [
+      { code: "ENG101", name: "Engineering Mechanics", credit: 3, professor: "Dr. Lee" },
+      { code: "ENG201", name: "Thermodynamics", credit: 4, professor: "Dr. Wilson" },
+      { code: "ENG301", name: "Circuits", credit: 3, professor: "Dr. Taylor" },
+      { code: "ENG401", name: "Fluid Mechanics", credit: 3, professor: "Dr. Harris" },
+      { code: "ENG501", name: "Materials Science", credit: 4, professor: "Dr. Martin" },
+      { code: "ENG601", name: "Control Systems", credit: 3, professor: "Dr. Thompson" },
+      { code: "ENG701", name: "Heat Transfer", credit: 3, professor: "Dr. Garcia" },
+      { code: "ENG801", name: "Structural Analysis", credit: 4, professor: "Dr. Martinez" },
+      { code: "ENG901", name: "Robotics", credit: 3, professor: "Dr. Brown" },
+      { code: "ENG1001", name: "Renewable Energy", credit: 4, professor: "Dr. Green" }
+    ];
+    } else if (selectedCourse === "Biology") {
+    courses = [
+      { code: "BIO101", name: "General Biology", credit: 3, professor: "Dr. Anderson" },
+      { code: "BIO201", name: "Genetics", credit: 4, professor: "Dr. Thompson" },
+      { code: "BIO301", name: "Ecology", credit: 3, professor: "Dr. Martinez" },
+      { code: "BIO401", name: "Microbiology", credit: 3, professor: "Dr. Robinson" },
+      { code: "BIO501", name: "Cell Biology", credit: 4, professor: "Dr. Clark" },
+      { code: "BIO601", name: "Molecular Biology", credit: 3, professor: "Dr. Rodriguez" },
+      { code: "BIO701", name: "Biochemistry", credit: 3, professor: "Dr. Lewis" },
+      { code: "BIO801", name: "Immunology", credit: 4, professor: "Dr. Lee" },
+      { code: "BIO901", name: "Neuroscience", credit: 3, professor: "Dr. White" },
+      { code: "BIO1001", name: "Evolutionary Biology", credit: 4, professor: "Dr. Black" }
+    ];
+    }
+      courses.forEach(course => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${course.code}</td>
+                                  <td>${course.name}</td>
+                                  <td>${course.credit}</td>
+                                  <td>${course.professor}</td>
+                                </tr>`;
+      });
+    }
+
+    /* -------------------------
+       Semester Schedule Functions for Advisor
+       (Mirrors the student portal but uses the advisor's table ID)
+    -------------------------- */
+    function generateSemesterScheduleAdvisor() {
+      const tableBody = document.getElementById('semesterScheduleTableAdvisor');
+      tableBody.innerHTML = "";
+      
+      if (!selectedCourse) {
+      }
+      
+      let courses = [];
+      // Dummy course data based on selectedCourse
+      if (selectedCourse === "Computer Science") {
+        courses = [
+          { code: "CS101", name: "Intro to Programming", credit: 3, professor: "Dr. Smith" },
+          { code: "CS201", name: "Data Structures", credit: 4, professor: "Dr. Johnson" },
+          { code: "CS301", name: "Algorithms", credit: 3, professor: "Dr. Brown" },
+          { code: "CS401", name: "Operating Systems", credit: 3, professor: "Dr. Green" },
+          { code: "CS501", name: "Machine Learning", credit: 4, professor: "Dr. Black" },
+          { code: "CS601", name: "Artificial Intelligence", credit: 3, professor: "Dr. White" },
+          { code: "CS701", name: "Computer Networks", credit: 3, professor: "Dr. Grey" },
+          { code: "CS801", name: "Database Systems", credit: 4, professor: "Dr. Blue" },
+          { code: "CS901", name: "Cyber Security", credit: 3, professor: "Dr. Violet" },
+          { code: "CS1001", name: "Software Engineering", credit: 4, professor: "Dr. Indigo" }
+        ];
+      } else if (selectedCourse === "Business") {
+        courses = [
+          { code: "BUS101", name: "Principles of Management", credit: 3, professor: "Dr. Davis" },
+          { code: "BUS201", name: "Marketing Fundamentals", credit: 3, professor: "Dr. White" },
+          { code: "BUS301", name: "Financial Accounting", credit: 4, professor: "Dr. Miller" },
+          { code: "BUS401", name: "Business Ethics", credit: 3, professor: "Dr. Clark" },
+          { code: "BUS501", name: "Corporate Finance", credit: 4, professor: "Dr. Lewis" },
+          { code: "BUS601", name: "HR Management", credit: 3, professor: "Dr. Walker" },
+          { code: "BUS701", name: "International Business", credit: 3, professor: "Dr. Hall" },
+          { code: "BUS801", name: "Strategic Management", credit: 4, professor: "Dr. Allen" },
+          { code: "BUS901", name: "Entrepreneurship", credit: 3, professor: "Dr. King" },
+          { code: "BUS1001", name: "Supply Chain Management", credit: 4, professor: "Dr. Wright" }
+        ];
+      } else if (selectedCourse === "Engineering") {
+        courses = [
+          { code: "ENG101", name: "Engineering Mechanics", credit: 3, professor: "Dr. Lee" },
+          { code: "ENG201", name: "Thermodynamics", credit: 4, professor: "Dr. Wilson" },
+          { code: "ENG301", name: "Circuits", credit: 3, professor: "Dr. Taylor" },
+          { code: "ENG401", name: "Fluid Mechanics", credit: 3, professor: "Dr. Harris" },
+          { code: "ENG501", name: "Materials Science", credit: 4, professor: "Dr. Martin" },
+          { code: "ENG601", name: "Control Systems", credit: 3, professor: "Dr. Thompson" },
+          { code: "ENG701", name: "Heat Transfer", credit: 3, professor: "Dr. Garcia" },
+          { code: "ENG801", name: "Structural Analysis", credit: 4, professor: "Dr. Martinez" },
+          { code: "ENG901", name: "Robotics", credit: 3, professor: "Dr. Brown" },
+          { code: "ENG1001", name: "Renewable Energy", credit: 4, professor: "Dr. Green" }
+        ];
+      } else if (selectedCourse === "Biology") {
+        courses = [
+          { code: "BIO101", name: "General Biology", credit: 3, professor: "Dr. Anderson" },
+          { code: "BIO201", name: "Genetics", credit: 4, professor: "Dr. Thompson" },
+          { code: "BIO301", name: "Ecology", credit: 3, professor: "Dr. Martinez" },
+          { code: "BIO401", name: "Microbiology", credit: 3, professor: "Dr. Robinson" },
+          { code: "BIO501", name: "Cell Biology", credit: 4, professor: "Dr. Clark" },
+          { code: "BIO601", name: "Molecular Biology", credit: 3, professor: "Dr. Rodriguez" },
+          { code: "BIO701", name: "Biochemistry", credit: 3, professor: "Dr. Lewis" },
+          { code: "BIO801", name: "Immunology", credit: 4, professor: "Dr. Lee" },
+          { code: "BIO901", name: "Neuroscience", credit: 3, professor: "Dr. White" },
+          { code: "BIO1001", name: "Evolutionary Biology", credit: 4, professor: "Dr. Black" }
+        ];
+      }
+      
+      // Split the courses into Fall and Spring semesters
+      const fallCourses = courses.slice(0, Math.ceil(courses.length / 2));
+      const springCourses = courses.slice(Math.ceil(courses.length / 2));
+
+      // Build the HTML for the table with separate headings for Fall and Spring
+      let tableHTML = "<tr><th colspan='5'>Fall Semester</th></tr>";
+      fallCourses.forEach(course => {
+        tableHTML += `<tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credit}</td>
+                        <td>${course.professor}</td>
+                      </tr>`;
+      });
+      tableHTML += "<tr><th colspan='5'>Spring Semester</th></tr>";
+      springCourses.forEach(course => {
+        tableHTML += `<tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credit}</td>
+                        <td>${course.professor}</td>
+                      </tr>`;
+      });
+
+      document.getElementById('semesterScheduleTableAdvisor').innerHTML = tableHTML;
+    }
+
+    // Function to simulate course registration with an alert
+    function registerCourse(code, name, credit, professor) {
+      alert(`You have registered for ${code} - ${name}\nCredit Hours: ${credit}\nProfessor: ${professor}`);
+    }
+
+    /* -------------------------
+       Student List Functions
+    -------------------------- */
+    function generateStudentList() {
+      const tableBody = document.getElementById('studentListTable');
+      tableBody.innerHTML = "";
+      // Dummy student data (more students)
+      const students = [
+        { name: "Alice Johnson", id: "S001", course: "Computer Science" },
+        { name: "Bob Smith", id: "S002", course: "Business" },
+        { name: "Carol Lee", id: "S003", course: "Engineering" },
+        { name: "David Kim", id: "S004", course: "Biology" },
+        { name: "Eva Brown", id: "S005", course: "Computer Science" },
+        { name: "Frank Wilson", id: "S006", course: "Business" },
+        { name: "Grace Martin", id: "S007", course: "Engineering" },
+        { name: "Henry Davis", id: "S008", course: "Biology" },
+        { name: "Ivy Clark", id: "S009", course: "Computer Science" },
+        { name: "Jack Lewis", id: "S010", course: "Business" },
+        { name: "Karen Young", id: "S011", course: "Engineering" },
+        { name: "Leo Harris", id: "S012", course: "Biology" }
+      ];
+      students.forEach(student => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${student.name}</td>
+                                  <td>${student.id}</td>
+                                  <td>${student.course}</td>
+                                </tr>`;
+      });
+    }
+
+    /* -------------------------
+       Financial Aid Review Functions
+    -------------------------- */
+    function generateFinancialAidApplications() {
+      const tableBody = document.getElementById('financialAidTable');
+      tableBody.innerHTML = "";
+      // Dummy financial aid applications
+      const applications = [
+        { name: "Alice Johnson", id: "S001", amount: "$2000" },
+        { name: "Frank Wilson", id: "S006", amount: "$1500" },
+        { name: "Ivy Clark", id: "S009", amount: "$2500" },
+        { name: "Jack Lewis", id: "S010", amount: "$1800" },
+        { name: "Karen Young", id: "S011", amount: "$2200" },
+        { name: "Leo Harris", id: "S012", amount: "$1900" }
+      ];
+      applications.forEach(app => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${app.name}</td>
+                                  <td>${app.id}</td>
+                                  <td>${app.amount}</td>
+                                  <td>
+                                    <button class="btn btn-success btn-sm" onclick="processFinancialAid('${app.id}', 'approved')">Approve</button>
+                                    <button class="btn btn-danger btn-sm" onclick="processFinancialAid('${app.id}', 'denied')">Deny</button>
+                                  </td>
+                                </tr>`;
+      });
+    }
+
+    function processFinancialAid(studentId, decision) {
+      alert(`Financial aid for student ID ${studentId} has been ${decision}.`);
+    }
+
+    /* -------------------------
+       Chat Bot Functions
+    -------------------------- */
+    function toggleChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+        chatWindow.style.display = 'flex';
+      } else {
+        chatWindow.style.display = 'none';
+      }
+    }
+
+    function handleChatInput(event) {
+      if (event.key === 'Enter') {
+        const inputField = document.getElementById('chatInput');
+        const message = inputField.value.trim();
+        if (message !== '') {
+          const chatContent = document.getElementById('chatContent');
+          const userMessage = document.createElement('div');
+          userMessage.textContent = "You: " + message;
+          chatContent.appendChild(userMessage);
+          inputField.value = '';
+          chatContent.scrollTop = chatContent.scrollHeight;
+          setTimeout(() => {
+            const botMessage = document.createElement('div');
+            botMessage.textContent = "Bot: " + message;
+            chatContent.appendChild(botMessage);
+            chatContent.scrollTop = chatContent.scrollHeight;
+          }, 500);
+        }
+      }
+    }
+    
+    // Optionally, load the first section by default
+    loadAdvisorSection('overallStudyPlanSection');
+  </script>
+</body>
+</html>

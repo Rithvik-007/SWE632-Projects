@@ -65,7 +65,22 @@
 
 /* Light green background for navbar */
 #studentNavbar {
-  background-color: #90ee90 !important;
+  background-color: #90ee90;
+}
+
+#advisorNavbar {
+  background-color: #1417dce3;
+}
+
+#advisorNavbar a {
+  color: white;
+  text-decoration: underline;
+}
+
+#advisorNavbar a:hover {
+  text-decoration: none;
+  transform: translateY(-5px);
+  transition: color 0.3s, text-decoration 0.3s, transform 0.3s;
 }
 
 /* Optional: basic spacing and styling for feature sections */

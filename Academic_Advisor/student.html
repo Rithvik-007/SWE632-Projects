@@ -20,9 +20,6 @@
       <div class="collapse navbar-collapse" id="navContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('questionsSection')">Student Questions</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="javascript:void(0);" onclick="loadFeature('selectCourseSection')">Select Course</a>
           </li>
           <li class="nav-item">
@@ -41,23 +38,8 @@
 
   <!-- Main Content Area -->
   <div class="container mt-4">
-    <!-- Feature 1: Student Questions -->
-    <div id="questionsSection" class="feature-page">
-      <h2>Student Self-Assessment</h2>
-      <p>Click the button to view sample questions to help you reflect on your academic preferences:</p>
-      <button class="btn btn-info mb-3" onclick="toggleVisibility('questionsList')">Toggle Questions</button>
-      <div id="questionsList" class="d-none">
-        <ul>
-          <li><strong>Q:</strong> Which subjects ignite your passion?</li>
-          <li><strong>Q:</strong> What skills do you excel in?</li>
-          <li><strong>Q:</strong> How do you envision your future career?</li>
-          <li><strong>Q:</strong> What type of learning environment suits you best?</li>
-        </ul>
-      </div>
-    </div>
-
     <!-- Feature 2: Select Course -->
-    <div id="selectCourseSection" class="feature-page" style="display: none;">
+    <div id="selectCourseSection" class="feature-page">
       <h2>Select Your Course</h2>
       <p>Choose the course (or major) you’re interested in from the list below:</p>
       <select id="courseDropdown" class="form-select mb-3" style="max-width: 300px;">
