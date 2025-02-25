@@ -129,13 +129,13 @@
   </div>
 
   <!-- Chat Bot Widget -->
-  <div id="chatBot" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: #28a745; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold; z-index: 1000;" onclick="toggleChat()">
+  <div id="chatBot" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background-color: #28a745; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold;" onclick="toggleChat()">
     Chat
   </div>
-  <div id="chatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column; z-index: 1000;">
-    <div id="chatHeader" style="background-color: #28a745; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; font-size: 16px; font-weight: bold;">Chat Bot</div>
-    <div id="chatContent" style="flex: 1; padding: 10px; overflow-y: auto; font-size: 14px;"></div>
-    <input type="text" id="chatInput" style="border: none; border-top: 1px solid #ccc; padding: 10px; width: calc(100% - 20px); outline: none;" placeholder="Type a message..." onkeypress="handleChatInput(event)">
+  <div id="chatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ccc; border-radius: 10px; display: none; flex-direction: column;">
+    <div style="background-color: #28a745; color: white; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Chat Bot</div>
+    <div id="chatContent" style="flex: 1; padding: 10px; overflow-y: auto;"></div>
+    <input type="text" id="chatInput" style="border: 10px; border-top: 1px solid #ccc; padding: 10px; width: calc(100% - 20px); box-sizing: border-box; margin: 10px 10px 10px;" placeholder="Type a message..." onkeypress="handleChatInput(event)">
   </div>
 
   <!-- Bootstrap JS Bundle -->
@@ -406,22 +406,32 @@
 
     function handleChatInput(event) {
       if (event.key === 'Enter') {
-        const inputField = document.getElementById('chatInput');
-        const message = inputField.value.trim();
-        if (message !== '') {
-          const chatContent = document.getElementById('chatContent');
-          const userMessage = document.createElement('div');
-          userMessage.textContent = "You: " + message;
-          chatContent.appendChild(userMessage);
-          inputField.value = '';
-          chatContent.scrollTop = chatContent.scrollHeight;
-          setTimeout(() => {
-            const botMessage = document.createElement('div');
-            botMessage.textContent = "Bot: " + message;
-            chatContent.appendChild(botMessage);
-            chatContent.scrollTop = chatContent.scrollHeight;
-          }, 500);
-        }
+      const chatContent = document.getElementById('chatContent');
+      const chatInput = document.getElementById('chatInput');
+      const message = chatInput.value.trim();
+      if (message) {
+        const userMessage = document.createElement('div');
+        userMessage.textContent = `You: ${message}`;
+        userMessage.style.textAlign = 'right';
+        userMessage.style.margin = '5px 0';
+        userMessage.style.backgroundColor = '#e9ecef';
+        userMessage.style.padding = '5px';
+        userMessage.style.borderRadius = '5px';
+        chatContent.appendChild(userMessage);
+        chatInput.value = '';
+        // Simulate bot response
+        setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.textContent = `Bot: This is a response from the bot.`;
+        botMessage.style.textAlign = 'left';
+        botMessage.style.margin = '5px 0';
+        botMessage.style.backgroundColor = '#f8f9fa';
+        botMessage.style.padding = '5px';
+        botMessage.style.borderRadius = '5px';
+        chatContent.appendChild(botMessage);
+        chatContent.scrollTop = chatContent.scrollHeight;
+        }, 1000);
+      }
       }
     }
     

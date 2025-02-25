@@ -68,8 +68,19 @@
   background-color: #90ee90;
 }
 
+#studentNavbar a {
+  text-decoration: underline;
+}
+
 #advisorNavbar {
   background-color: #1417dce3;
+}
+
+#studentNavbar a:hover {
+  text-decoration: none;
+  transform: translateY(-5px);
+  transition: color 0.3s, text-decoration 0.3s, transform 0.3s;
+  
 }
 
 #advisorNavbar a {
