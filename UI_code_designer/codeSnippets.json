@@ -1,0 +1,42 @@
+{
+    "login": "<form>\\n  <div class='form-group'>\\n    <label for='email'>Email address:</label>\\n    <input type='email' class='form-control' id='email' placeholder='Enter email'>\\n  </div>\\n  <div class='form-group'>\\n    <label for='pwd'>Password:</label>\\n    <input type='password' class='form-control' id='pwd' placeholder='Enter password'>\\n  </div>\\n  <button type='submit' class='btn btn-primary'>Submit</button>\\n</form>",
+    "shopping_cart": "<div class='shopping-cart'>\\n  <div class='cart-items'>\\n    <div class='cart-row'>\\n      <span class='cart-item cart-header cart-column'>ITEM</span>\\n      <span class='cart-price cart-header cart-column'>PRICE</span>\\n      <span class='cart-quantity cart-header cart-column'>QUANTITY</span>\\n    </div>\\n    <div class='cart-row'>\\n      <div class='cart-item cart-column'>\\n        <img class='cart-item-image' src='item.png' width='100' height='100'>\\n        <span class='cart-item-title'>Product 1</span>\\n      </div>\\n      <span class='cart-price cart-column'>$9.99</span>\\n      <div class='cart-quantity cart-column'>\\n        <input class='cart-quantity-input' type='number' value='1'>\\n        <button class='btn btn-danger' type='button'>REMOVE</button>\\n      </div>\\n    </div>\\n  </div>\\n  <div class='cart-buttons'>\\n    <button class='btn btn-primary btn-purchase' type='button'>PURCHASE</button>\\n  </div>\\n</div>",
+
+    
+        "login1": {
+          "code": "<form action=\"/submit-login\" method=\"POST\">\n  <div class=\"form-group\">\n    <label for=\"username\">Username:</label>\n    <input type=\"text\" class=\"form-control\" id=\"username\" name=\"username\" placeholder=\"Enter username\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"password\">Password:</label>\n    <input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\" placeholder=\"Password\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary\">Submit</button>\n</form>",
+          "inefficiencies": [
+            "Missing client-side validation.",
+            "Form elements lack accessibility attributes."
+          ],
+          "improvements": [
+            "Add 'required' attribute to enforce field completion.",
+            "Include 'aria-labels' for better accessibility.",
+            "Utilize password strength meter for improved security."
+          ]
+        },
+        "search": {
+          "code": "<form action=\"/search\" method=\"GET\">\n  <div class=\"form-group\">\n    <input type=\"text\" class=\"form-control\" id=\"search\" name=\"search\" placeholder=\"Search here...\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary\">Search</button>\n</form>",
+          "inefficiencies": [
+            "Lacks visual feedback for user interaction.",
+            "No live search or autocomplete feature."
+          ],
+          "improvements": [
+            "Implement visual cues for valid/invalid input.",
+            "Add a live search feature that displays results as the user types."
+          ]
+        },
+        "contact": {
+          "code": "<form action=\"/contact\" method=\"POST\">\n  <div class=\"form-group\">\n    <label for=\"name\">Name:</label>\n    <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"Your Name\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"email\">Email:</label>\n    <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" placeholder=\"Your Email\">\n  </div>\n  <div class=\"form-group\">\n    <label for=\"message\">Message:</label>\n    <textarea class=\"form-control\" id=\"message\" name=\"message\" placeholder=\"Your Message\"></textarea>\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary\">Send Message</button>\n</form>",
+          "inefficiencies": [
+            "No feedback on message delivery status.",
+            "Form submission is not asynchronous."
+          ],
+          "improvements": [
+            "Provide a confirmation message upon successful submission.",
+            "Use AJAX for form submission to avoid page reloads."
+          ]
+        }
+      
+  }
+  

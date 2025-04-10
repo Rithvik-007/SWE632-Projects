@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Code & UI Analyzer</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="design-page">
+  <div class="container-fluid my-4">
+    <!-- Page Header with Left Arrow Button -->
+    <div class="header">
+      <!-- Back arrow button linking to index.js -->
+      <a href="index.html" class="back-btn">&larr;</a>
+      <h1>Live Code & UI Analyzer</h1>
+      <p>Type your HTML/CSS code, preview the output, and receive pre-defined suggestions for UI design and code improvements.</p>
+    </div>
+
+    <!-- Code Editor & Output Preview Section -->
+    <div class="row mb-4">
+      <!-- Code Editor Column -->
+      <div class="col-md-6">
+        <h5>Code Editor</h5>
+        <textarea id="code-editor" class="code-editor" placeholder="Enter your HTML/CSS code here"></textarea>
+        <button id="run-btn" class="btn btn-success mt-2">Run Code</button>
+      </div>
+      <!-- Output Preview Column -->
+      <div class="col-md-6">
+        <h5>Output Preview</h5>
+        <iframe id="output-window" class="output-window"></iframe>
+      </div>
+    </div>
+
+    <!-- Analysis Section: Two Columns -->
+    <div class="row mb-4">
+      <!-- Design Analysis Column -->
+      <div class="col-md-6">
+        <h5>Design Analysis & Suggestions</h5>
+        <textarea id="design-analysis" class="analysis-area" readonly placeholder="Design analysis will be displayed here..."></textarea>
+      </div>
+      <!-- Code Analysis Column -->
+      <div class="col-md-6">
+        <h5>Code Analysis & Improvements</h5>
+        <textarea id="code-analysis" class="analysis-area" readonly placeholder="Code analysis will be displayed here..."></textarea>
+      </div>
+    </div>
+    <!-- Button to automatically fill analysis areas with pre-coded suggestions -->
+    <div class="row">
+      <div class="col-12 text-center">
+        <button id="analyze-btn" class="btn btn-info analysis-btn">Analyze Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Run Code button: Writes the code from the editor into the output iframe for live preview.
+    document.getElementById('run-btn').addEventListener('click', function () {
+      var code = document.getElementById('code-editor').value;
+      var iframe = document.getElementById('output-window');
+      iframe.contentDocument.open();
+      iframe.contentDocument.write(code);
+      iframe.contentDocument.close();
+    });
+
+    // Analyze Now button: Pre-populate the analysis areas with hard-coded suggestions.
+    document.getElementById('analyze-btn').addEventListener('click', function () {
+      // Pre-defined design suggestions:
+      var designSuggestions = 
+`Design Analysis Suggestions:
+1. Layout is clear and user-friendly. Consider increasing whitespace for a cleaner look.
+2. Color contrast is sufficient, but interactive elements could benefit from subtle hover effects.
+3. Typography is modern; consistency in margin and padding would enhance balance.`;
+      
+      // Pre-defined code analysis suggestions:
+      var codeSuggestions = 
+`Code Analysis Suggestions:
+1. HTML structure is well-organized, but moving inline styles to an external CSS file can improve maintainability.
+2. JavaScript functions could be modularized to reduce redundancy.
+3. Test responsiveness across devices; consider leveraging a CSS framework for consistent design.`;
+
+      document.getElementById('design-analysis').value = designSuggestions;
+      document.getElementById('code-analysis').value = codeSuggestions;
+    });
+  </script>
+</body>
+</html>
