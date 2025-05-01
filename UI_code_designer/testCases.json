@@ -1,0 +1,15 @@
+[
+    {
+      "component": "login",
+      "expected": "Login"
+    },
+    {
+      "component": "shopping_cart",
+      "expected": "Shopping Cart"
+    },
+    {
+      "component": "invalid",
+      "expected": "No specific code is available for the given component"
+    }
+  ]
+  
